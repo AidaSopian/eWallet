@@ -5,6 +5,7 @@ import { SnackBar } from "nativescript-snackbar";
 import * as ApplicationSettings from "application-settings";
 import { HttpClient } from "@angular/common/http";
 import { HttpService } from "~/app/http/http.service";
+import * as localStorage from 'nativescript-localstorage';
 
 /* ***********************************************************
 * Before you can navigate to this page from your app, you need to reference this page's module in the
@@ -53,9 +54,12 @@ export class LoginComponent implements OnInit {
             this.hs.httppost("login", this.loginData).then((data: any) => {
                 console.log(data);
                 if (data.message == "Success Login"){
-                    this.token = data.token; 
+                    // localStorage.setItem('username', data.username);
+                    // localStorage.setItem('user_pass', data.password)
                     ApplicationSettings.setBoolean("authenticated", true);
-                    this.router.navigate(["/secure"], { clearHistory: true });
+                    localStorage.setItem('user_token', data.token);
+
+                    this.router.navigate(["/secure"]);
                 } else {
                     (new SnackBar()).simple("incorrect username or password");
                 }

@@ -3,8 +3,9 @@ import { Observable } from 'rxjs/Rx';
 import { Location } from "@angular/common";
 import { SnackBar } from "nativescript-snackbar";
 import * as ApplicationSettings from "application-settings";
-import * as Validator from "email-validator";
-import { Validators, FormBuilder} from "@angular/forms";
+//import * as Validator from "email-validator";
+import { FormBuilder, FormGroup, Validator, Validators } from '@angular/forms';
+
 import { RouterExtensions } from "nativescript-angular/router";
 import { HttpClient } from "@angular/common/http";
 import { HttpService } from "~/app/http/http.service";
@@ -25,8 +26,10 @@ export class RegisterComponent implements OnInit {
 
     public registerData: any;
     status: any;
+    post: any;
+    rForm: FormGroup;
 
-    constructor(private location: Location, private router: RouterExtensions, public http: HttpClient, public hs: HttpService) {
+    constructor(private location: Location, private router: RouterExtensions, public http: HttpClient, public hs: HttpService, private fb: FormBuilder) {
         this.registerData = {
             "name": "",
             "hp": "",
@@ -35,10 +38,19 @@ export class RegisterComponent implements OnInit {
             "password": "",
             "password_confirmation": ""
         }
+
+        this.rForm = fb.group({
+            name : [null, Validators.required],
+            hp : [null, Validators.compose([Validators.required, Validators.minLength(10)])],
+            username: [null, Validators.required],
+            email : ['', Validators.compose([Validators.pattern(/^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/), Validators.required])],
+            password : [null, Validators.required],
+            password_confirmation : [null, Validators.required],
+        })
     }
 
     isValidEmail() {
-        return Validator.validate(this.registerData.email);
+        //return Validator.validate(this.registerData.email);
     }
 
     ngOnInit(): void {
@@ -76,15 +88,6 @@ export class RegisterComponent implements OnInit {
         else {
             (new SnackBar()).simple("All Fields Required!");
         }
-    }
-
-    validate(){
-        // name: ['', validator.required],
-        // email: ['', validator.compose([Validators.pattern(/^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/), Validators.required])],
-        // code: ['', Validators.required],
-        // mobile: ['', Validators.compose([Validators.pattern(/^[0-9]{8,12}$/), Validators.required])],
-        // password: ['', Validators.compose([Validators.pattern(/(?=[^\s]{8,}$)/), Validators.required])],
-    
     }
 
     public goBack() {

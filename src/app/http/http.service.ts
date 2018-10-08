@@ -21,12 +21,8 @@ export class HttpService {
     });
   }
 
-  // public httppost = (data: any) => {
-  //   return this.http.post("http://ewallet.simbiotiktech.com/app/user/register", data).subscribe((res: any) => {console.log(res);})
-  // }
-
-  public httpget = (req) => {
-    return this.http.get(this.url.concat(req)).map((res: any) => res.json());
+  public httpget = (req, data: any) => {
+    return this.http.get(this.url.concat(req).concat(data)).map((res: any) => res.json());
   }
 
 }
