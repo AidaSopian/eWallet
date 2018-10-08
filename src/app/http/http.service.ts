@@ -12,7 +12,13 @@ export class HttpService {
   }
 
   public httppost = (reqType, data: any) => {
-    return this.http.post(this.url.concat(reqType), data).subscribe((res: any) => {console.log(res);})
+    return new Promise( resolve => {
+      this.http.post(this.url.concat(reqType), data)
+      .subscribe((res: any) => {
+        resolve(res);
+        console.log(res);
+      });
+    });
   }
 
   // public httppost = (data: any) => {

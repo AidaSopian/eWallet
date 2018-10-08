@@ -61,22 +61,16 @@ export class RegisterComponent implements OnInit {
             if(this.isValidEmail()){
                 console.log(this.registerData);
 
-                this.hs.httppost("register", this.registerData);
+                this.hs.httppost("register", this.registerData).then((data: any) => {
+                    console.log(data);
+                    if (data.message == "Success Register"){
+                        ApplicationSettings.setBoolean("authenticated", true);
+                        this.router.navigate(["/secure"], { clearHistory: true });
+                    } else {
+                        (new SnackBar()).simple("Unable to Register");
+                    }
 
-                ApplicationSettings.setBoolean("authenticated", true);
-                this.router.navigate(["/login"], { clearHistory: true });
-
-                //subscribe error? not getting observable?
-                // this.hs.httppost(this.registerData).subscribe(data => {
-                //     ApplicationSettings.setBoolean("authenticated", true);
-                //     this.router.navigate(["/login"], { clearHistory: true });
-                // });
-
-                //somehow this subscription is ok
-                // this.http.post("http://ewallet.simbiotiktech.com/app/user/register", this.registerData).subscribe(data => {
-                //     ApplicationSettings.setBoolean("authenticated", true);
-                //     this.router.navigate(["/login"], { clearHistory: true });
-                // });
+                });
             }
         } 
         else {

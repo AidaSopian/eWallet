@@ -48,18 +48,19 @@ export class LoginComponent implements OnInit {
     login(): void {
         if(this.loginData.username && this.loginData.password) {
 
-            this.hs.httppost("login", this.loginData);
+            //this.hs.httppost("login", this.loginData);
 
-            // this.hs.httppost("login", this.loginData).subscribe((data: any) => {
-            //     this.token = data.token; 
-            //     ApplicationSettings.setBoolean("authenticated", true);
-            //     this.router.navigate(["/secure"], { clearHistory: true });
-            // });
+            this.hs.httppost("login", this.loginData).then((data: any) => {
+                console.log(data);
+                if (data.message == "Success Login"){
+                    this.token = data.token; 
+                    ApplicationSettings.setBoolean("authenticated", true);
+                    this.router.navigate(["/secure"], { clearHistory: true });
+                } else {
+                    (new SnackBar()).simple("incorrect username or password");
+                }
+            });
 
-            // this.http.post("login", this.loginData).subscribe((data: any) => {
-            //     ApplicationSettings.setBoolean("authenticated", true);
-            //     this.router.navigate(["/secure"], { clearHistory: true });
-            // });
         } else {
             (new SnackBar()).simple("All Fields Required!");
         }
@@ -71,36 +72,3 @@ export class LoginComponent implements OnInit {
         *************************************************************/
     }
 }
-
-// export class LoginComponent implements OnInit {
-
-//     public input: any;
-
-//     public constructor(private router: RouterExtensions) {
-//         this.input = {
-//             "email": "",
-//             "password": ""
-//         }
-//     }
-
-//     public ngOnInit() {
-//         if(ApplicationSettings.getBoolean("authenticated", false)) {
-//             this.router.navigate(["/secure"], { clearHistory: true });
-//         }
-//     }
-
-//     public login() {
-//         if(this.input.email && this.input.password) {
-//             let account = JSON.parse(ApplicationSettings.getString("account", "{}"));
-//             if(this.input.email == account.email && this.input.password == account.password) {
-//                 ApplicationSettings.setBoolean("authenticated", true);
-//                 this.router.navigate(["/secure"], { clearHistory: true });
-//             } else {
-//                 (new SnackBar()).simple("Incorrect Credentials!");
-//             }
-//         } else {
-//             (new SnackBar()).simple("All Fields Required!");
-//         }
-//     }
-
-// }
