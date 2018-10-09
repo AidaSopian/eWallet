@@ -3,19 +3,13 @@ import { Observable } from 'rxjs/Rx';
 import { Location } from "@angular/common";
 import { SnackBar } from "nativescript-snackbar";
 import * as ApplicationSettings from "application-settings";
-//import * as Validator from "email-validator";
-import { FormBuilder, FormGroup, Validator, Validators } from '@angular/forms';
+import * as Validator from "email-validator";
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { RouterExtensions } from "nativescript-angular/router";
 import { HttpClient } from "@angular/common/http";
 import { HttpService } from "~/app/http/http.service";
-
-/* ***********************************************************
-* Before you can navigate to this page from your app, you need to reference this page's module in the
-* global app router module. Add the following object to the global array of routes:
-* { path: "register", loadChildren: "./register/register.module#RegisterModule" }
-* Note that this simply points the path to the page module file. If you move the page, you need to update the route too.
-*************************************************************/
+import { EventData } from "tns-core-modules/ui/page/page";
 
 @Component({
     selector: "Register",
@@ -24,33 +18,38 @@ import { HttpService } from "~/app/http/http.service";
 })
 export class RegisterComponent implements OnInit {
 
-    public registerData: any;
+    registerData: any;
     status: any;
-    post: any;
-    rForm: FormGroup;
+    regData: any;
 
-    constructor(private location: Location, private router: RouterExtensions, public http: HttpClient, public hs: HttpService, private fb: FormBuilder) {
+    constructor(
+        private location: Location, 
+        private router: RouterExtensions, 
+        public http: HttpClient, 
+        public hs: HttpService, 
+        private fb: FormBuilder
+        ) {
         this.registerData = {
             "name": "",
             "hp": "",
             "username": "",
             "email": "",
             "password": "",
-            "password_confirmation": ""
+            "password_confirmation": "",
         }
 
-        this.rForm = fb.group({
-            name : [null, Validators.required],
-            hp : [null, Validators.compose([Validators.required, Validators.minLength(10)])],
-            username: [null, Validators.required],
-            email : ['', Validators.compose([Validators.pattern(/^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/), Validators.required])],
-            password : [null, Validators.required],
-            password_confirmation : [null, Validators.required],
-        })
+        // this.registerData = this.fb.group({
+        //     name : [null, Validators.required],
+        //     hp : [null, Validators.compose([Validators.required, Validators.minLength(10)])],
+        //     username: [null, Validators.required],
+        //     email : ['', Validators.compose([Validators.pattern(/^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/), Validators.required])],
+        //     password : [null, Validators.required],
+        //     password_confirmation : [null, Validators.required],
+        // })
     }
 
     isValidEmail() {
-        //return Validator.validate(this.registerData.email);
+        return Validator.validate(this.registerData.value.email);
     }
 
     ngOnInit(): void {
@@ -68,26 +67,28 @@ export class RegisterComponent implements OnInit {
     }
 
     register(): void {
-        console.log(this.registerData);
-        if(this.registerData.name && this.registerData.hp && this.registerData.username && this.registerData.email && this.registerData.password && this.registerData.password_confirmation) {
-            if(this.isValidEmail()){
-                console.log(this.registerData);
 
-                this.hs.httppost("register", this.registerData).then((data: any) => {
-                    console.log(data);
-                    if (data.message == "Success Register"){
-                        ApplicationSettings.setBoolean("authenticated", true);
-                        this.router.navigate(["/secure"], { clearHistory: true });
-                    } else {
-                        (new SnackBar()).simple("Unable to Register");
-                    }
+        console.log(this.regData);
+        if(this.isValidEmail()) {
 
-                });
-            }
+            this.hs.httppost("register", this.regData).then((data: any) => {
+                console.log(data);
+                if (data.message == "Success Register"){
+                    ApplicationSettings.setBoolean("authenticated", true);
+                    this.router.navigate(["/secure"], { clearHistory: true });
+                } else {
+                    (new SnackBar()).simple("Unable to Register");
+                }
+
+            });
         } 
         else {
             (new SnackBar()).simple("All Fields Required!");
         }
+    }
+
+    passConfirm(){
+        return true;
     }
 
     public goBack() {

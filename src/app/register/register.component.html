@@ -5,39 +5,119 @@
     <ScrollView>
         <StackLayout margin="10" verticalAlignment="center">
             <StackLayout class="form" padding="15" backgroundColor="#FFFFFF">
+
                 <StackLayout class="input-field">
                     <Label text="Name" class="label font-weight-bold m-b-5"></Label>
-                    <TextField class="input" [(ngModel)]="registerData.name"></TextField>
+                    <TextField #name="ngModel" class="input" [(ngModel)]="registerData.name" required ></TextField>
                     <StackLayout class="hr-light"></StackLayout>
+                    <StackLayout *ngIf="name.errors">
+                        <Label *ngIf="name.errors.required" text="- A name is required -"></Label>
+                    </StackLayout>
                 </StackLayout>
+
                 <StackLayout class="input-field">
-                    <Label text="username" class="label font-weight-bold m-b-5"></Label>
-                    <TextField class="input" [(ngModel)]="registerData.username"></TextField>
+                    <Label text="Username" class="label font-weight-bold m-b-5"></Label>
+                    <TextField #username="ngModel" class="input" [(ngModel)]="registerData.username" required ></TextField>
                     <StackLayout class="hr-light"></StackLayout>
+                    <StackLayout *ngIf="username.errors">
+                        <Label *ngIf="username.errors.required" text="- username is required -"></Label>
+                    </StackLayout>
                 </StackLayout>
+
                 <StackLayout class="input-field">
                     <Label text="Phone Number" class="label font-weight-bold m-b-5"></Label>
-                    <TextField class="input" [(ngModel)]="registerData.hp"></TextField>
+                    <TextField #hp="ngModel" class="input" minlength="10" [(ngModel)]="registerData.hp" required ></TextField>
                     <StackLayout class="hr-light"></StackLayout>
+                    <StackLayout *ngIf="hp.errors && (hp.dirty || hp.touched)">
+                        <Label *ngIf="hp.errors.required" text="- A phone number is required -"></Label>
+                        <Label *ngIf="hp.errors.minlength" text="- Phone number must be longer than 10 -"></Label>
+                    </StackLayout>
                 </StackLayout>
+
                 <StackLayout class="input-field">
                     <Label text="Email" class="label font-weight-bold m-b-5"></Label>
-                    <TextField class="input" [(ngModel)]="registerData.email"></TextField>
+                    <TextField #email="ngModel" class="input" [(ngModel)]="registerData.email" required email></TextField>
                     <StackLayout class="hr-light"></StackLayout>
+                    <StackLayout *ngIf="email.errors && (email.dirty || email.touched)">
+                        <Label *ngIf="email.errors.required" text="- An email is required -"></Label>
+                        <Label *ngIf="email.errors.email" text="- Email must be valid -"></Label>
+                    </StackLayout>
                 </StackLayout>
+
                 <StackLayout class="input-field">
                     <Label text="Password" class="label font-weight-bold m-b-5"></Label>
-                    <TextField secure="true" class="input" [(ngModel)]="registerData.password"></TextField>
+                    <TextField #password="ngModel" secure="true" class="input" minlength="6" [(ngModel)]="registerData.password" required  ></TextField>
                     <StackLayout class="hr-light"></StackLayout>
+                    <StackLayout *ngIf="password.errors && (password.dirty || password.touched)">
+                        <Label *ngIf="password.errors.required" text="- A password is required -"></Label>
+                        <Label *ngIf="password.errors.minlength" text="- Password must be longer than 5 characters"></Label>
+                    </StackLayout>
                 </StackLayout>
+
                 <StackLayout class="input-field">
                     <Label text="Confirm Password" class="label font-weight-bold m-b-5"></Label>
-                    <TextField secure="true" class="input" [(ngModel)]="registerData.password_confirmation"></TextField>
+                    <TextField #password_confirmation="ngModel" secure="true" class="input" [(ngModel)]="registerData.password_confirmation" required></TextField>
                     <StackLayout class="hr-light"></StackLayout>
+                    <StackLayout *ngIf="password.errors && passConfirm()">
+                        <Label *ngIf="password.errors.required" text="- A password is required -"></Label>
+                        <Label *ngIf="!registerData.password_confirmation === registerData.password" text="- your password do not match"></Label>
+                    </StackLayout>
                 </StackLayout>
-                <Button class="btn btn-primary w-full" text="Register" (tap)="register()"></Button>
+
+                <Button class="btn btn-primary w-full" text="Register" (tap)="register()" *ngIf="name.valid && username.valid && hp.valid && email.valid && password.valid "></Button>
                 <Label (tap)="goBack()" text="Already a member? Login here." class="text-center footnote"></Label>
             </StackLayout>
         </StackLayout>
     </ScrollView>
 </GridLayout>
+
+<!-- <ActionBar title="Register">
+<NavigationButton text="Back" ios.position="left"></NavigationButton>
+</ActionBar>
+
+<div *ngIf="!name">
+
+</div>
+
+<GridLayout backgroundColor="#CCCCCC">
+    <ScrollView>
+        <form [formGroup]="registerData" (ngSubmit)="register(registerData.value)">
+            <StackLayout margin="10" verticalAlignment="center">
+                <StackLayout class="form" padding="15" backgroundColor="#FFFFFF">
+                    <StackLayout class="input-field">
+                        <Label text="Name" class="label font-weight-bold m-b-5"></Label>
+                        <TextField class="input" formControlName="name"></TextField>
+                        <StackLayout class="hr-light"></StackLayout>
+                    </StackLayout>
+                    <StackLayout class="input-field">
+                        <Label text="username" class="label font-weight-bold m-b-5"></Label>
+                        <TextField class="input" formControlName="username"></TextField>
+                        <StackLayout class="hr-light"></StackLayout>
+                    </StackLayout>
+                    <StackLayout class="input-field">
+                        <Label text="Phone Number" class="label font-weight-bold m-b-5"></Label>
+                        <TextField class="input" formControlName="hp"></TextField>
+                        <StackLayout class="hr-light"></StackLayout>
+                    </StackLayout>
+                    <StackLayout class="input-field">
+                        <Label text="Email" class="label font-weight-bold m-b-5"></Label>
+                        <TextField class="input" formControlName="email"></TextField>
+                        <StackLayout class="hr-light"></StackLayout>
+                    </StackLayout>
+                    <StackLayout class="input-field">
+                        <Label text="Password" class="label font-weight-bold m-b-5"></Label>
+                        <TextField secure="true" class="input" formControlName="password"></TextField>
+                        <StackLayout class="hr-light"></StackLayout>
+                    </StackLayout>
+                    <StackLayout class="input-field">
+                        <Label text="Confirm Password" class="label font-weight-bold m-b-5"></Label>
+                        <TextField secure="true" class="input" formControlName="password_confirmation"></TextField>
+                        <StackLayout class="hr-light"></StackLayout>
+                    </StackLayout>
+                    <Button class="btn btn-primary w-full" text="Register" (tap)="register()" [disable]="!registerData.valid"></Button>
+                    <Label (tap)="goBack()" text="Already a member? Login here." class="text-center footnote"></Label>
+                </StackLayout>
+            </StackLayout>
+        </form>
+    </ScrollView>
+</GridLayout> -->

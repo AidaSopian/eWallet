@@ -5,6 +5,7 @@ import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { NativeScriptHttpClientModule } from "nativescript-angular/http-client";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NativeScriptFormsModule } from "nativescript-angular/forms";
 
 import { LoginComponent } from "./login/login.component";
 import { RegisterComponent } from "./register/register.component";
@@ -13,6 +14,7 @@ import { SecureComponent } from "./secure/secure.component";
 import { HttpService } from "./http/http.service";
 import { DashboardComponent } from "~/app/dashboard/dashboard.component";
 import { HomeComponent } from "~/app/home/home.component";
+import { MinLengthDirective, IsEmailDirective } from "~/app/verification.directive";
 
 @NgModule({
     providers: [
@@ -28,7 +30,8 @@ import { HomeComponent } from "~/app/home/home.component";
         NativeScriptUISideDrawerModule,
         NativeScriptHttpClientModule,
         FormsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        NativeScriptFormsModule
     ],
     declarations: [
         AppComponent,
@@ -36,7 +39,9 @@ import { HomeComponent } from "~/app/home/home.component";
         RegisterComponent,
         SecureComponent,
         DashboardComponent,
-        HomeComponent
+        HomeComponent,
+        MinLengthDirective,
+        IsEmailDirective
     ],
     schemas: [
         NO_ERRORS_SCHEMA

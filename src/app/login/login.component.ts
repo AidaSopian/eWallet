@@ -7,6 +7,7 @@ import { HttpClient } from "@angular/common/http";
 import { HttpService } from "~/app/http/http.service";
 import * as localStorage from 'nativescript-localstorage';
 
+
 /* ***********************************************************
 * Before you can navigate to this page from your app, you need to reference this page's module in the
 * global app router module. Add the following object to the global array of routes:
@@ -47,9 +48,8 @@ export class LoginComponent implements OnInit {
     }
 
     login(): void {
+        console.log(this.loginData);
         if(this.loginData.username && this.loginData.password) {
-
-            //this.hs.httppost("login", this.loginData);
 
             this.hs.httppost("login", this.loginData).then((data: any) => {
                 console.log(data);
