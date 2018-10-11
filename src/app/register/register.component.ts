@@ -37,15 +37,6 @@ export class RegisterComponent implements OnInit {
             "password": "",
             "password_confirmation": "",
         }
-
-        // this.registerData = this.fb.group({
-        //     name : [null, Validators.required],
-        //     hp : [null, Validators.compose([Validators.required, Validators.minLength(10)])],
-        //     username: [null, Validators.required],
-        //     email : ['', Validators.compose([Validators.pattern(/^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/), Validators.required])],
-        //     password : [null, Validators.required],
-        //     password_confirmation : [null, Validators.required],
-        // })
     }
 
     isValidEmail() {
@@ -66,29 +57,32 @@ export class RegisterComponent implements OnInit {
         *************************************************************/
     }
 
-    register(): void {
-
-        console.log(this.regData);
-        if(this.isValidEmail()) {
-
-            this.hs.httppost("register", this.regData).then((data: any) => {
-                console.log(data);
-                if (data.message == "Success Register"){
-                    ApplicationSettings.setBoolean("authenticated", true);
-                    this.router.navigate(["/secure"], { clearHistory: true });
-                } else {
-                    (new SnackBar()).simple("Unable to Register");
-                }
-
-            });
-        } 
-        else {
-            (new SnackBar()).simple("All Fields Required!");
-        }
+    passConfirm(pass, cfmPass){
+        if(cfmPass === pass){
+            return true;
+        } else { return false };
     }
 
-    passConfirm(){
-        return true;
+    register(): void {
+        console.log(this.regData);
+        let requestBody = new FormData();
+        requestBody.append("name", this.registerData.name);
+        requestBody.append("hp", this.registerData.hp);
+        requestBody.append("username", this.registerData.username);
+        requestBody.append("email", this.registerData.email);
+        requestBody.append("password", this.registerData.password);
+        requestBody.append("password_confirmation", this.registerData.password_confirmation);
+
+        this.hs.posthttp("login", requestBody).then((data: any) => {
+            console.log(data);
+            if (data.message == "Success Register"){
+                ApplicationSettings.setBoolean("authenticated", true);
+                this.router.navigate(["/secure"], { clearHistory: true });
+            } else {
+                (new SnackBar()).simple("Unable to Register");
+            }
+
+        });
     }
 
     public goBack() {

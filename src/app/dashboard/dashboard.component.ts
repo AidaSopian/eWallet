@@ -17,19 +17,28 @@ import * as localStorage from 'nativescript-localstorage';
     templateUrl: "./dashboard.component.html"
 })
 export class DashboardComponent implements OnInit {
+    private userDetails = Array();
     constructor(private router: RouterExtensions, private hs: HttpService) {
 
     }
 
-    ngOnInit(): void {
+    ngOnInit() {
         let token = localStorage.getItem("user_token");
-        this.hs.httpget("profile?token=", token).subscribe(res => {
-            console.log(res);
+        let url_id = "profile?token=";
+        let token_url = url_id.concat(token);
+        
+        this.hs.gethttp(token_url)
+            .then((res) => {
+            //console.log("dasboard" ,res);
+
+        }, err =>{
+            console.log(err);
         });
     }
 
     public logout() {
         ApplicationSettings.remove("authenticated");
+        localStorage.setItem('user_token', "");
         this.router.navigate(["/login"], { clearHistory: true });
     }
 }

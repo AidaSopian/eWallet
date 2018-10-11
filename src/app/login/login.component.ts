@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Rx';
 import { RouterExtensions } from "nativescript-angular/router";
 import { SnackBar } from "nativescript-snackbar";
 import * as ApplicationSettings from "application-settings";
-import { HttpClient } from "@angular/common/http";
+//import { HttpClient } from "@angular/common/http";
 import { HttpService } from "~/app/http/http.service";
 import * as localStorage from 'nativescript-localstorage';
 
@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit {
     public loginData: any;
     token: string;
 
-    constructor(public router: RouterExtensions, public http: HttpClient, public hs: HttpService) {
+    constructor(public router: RouterExtensions, public hs: HttpService) {
         this.loginData = {
             "username": "",
             "password": ""
@@ -50,8 +50,11 @@ export class LoginComponent implements OnInit {
     login(): void {
         console.log(this.loginData);
         if(this.loginData.username && this.loginData.password) {
-
-            this.hs.httppost("login", this.loginData).then((data: any) => {
+            let requestBody = new FormData();
+            requestBody.append("username", this.loginData.username);
+            requestBody.append("password", this.loginData.password);
+  
+            this.hs.posthttp("login",requestBody ).then((data: any) => {
                 console.log(data);
                 if (data.message == "Success Login"){
                     // localStorage.setItem('username', data.username);

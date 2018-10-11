@@ -10,7 +10,7 @@
                     <Label text="Name" class="label font-weight-bold m-b-5"></Label>
                     <TextField #name="ngModel" class="input" [(ngModel)]="registerData.name" required ></TextField>
                     <StackLayout class="hr-light"></StackLayout>
-                    <StackLayout *ngIf="name.errors">
+                    <StackLayout *ngIf="name.errors && (name.dirty || name.touched)">
                         <Label *ngIf="name.errors.required" text="- A name is required -"></Label>
                     </StackLayout>
                 </StackLayout>
@@ -19,7 +19,7 @@
                     <Label text="Username" class="label font-weight-bold m-b-5"></Label>
                     <TextField #username="ngModel" class="input" [(ngModel)]="registerData.username" required ></TextField>
                     <StackLayout class="hr-light"></StackLayout>
-                    <StackLayout *ngIf="username.errors">
+                    <StackLayout *ngIf="username.errors && (username.dirty || username.touched)">
                         <Label *ngIf="username.errors.required" text="- username is required -"></Label>
                     </StackLayout>
                 </StackLayout>
@@ -58,9 +58,9 @@
                     <Label text="Confirm Password" class="label font-weight-bold m-b-5"></Label>
                     <TextField #password_confirmation="ngModel" secure="true" class="input" [(ngModel)]="registerData.password_confirmation" required></TextField>
                     <StackLayout class="hr-light"></StackLayout>
-                    <StackLayout *ngIf="password.errors && passConfirm()">
-                        <Label *ngIf="password.errors.required" text="- A password is required -"></Label>
-                        <Label *ngIf="!registerData.password_confirmation === registerData.password" text="- your password do not match"></Label>
+                    <StackLayout *ngIf="password_confirmation.errors && !password_confirmation.value === password.value && (password_confirmation.dirty || password_confirmation.touched)">
+                        <Label *ngIf="password_confirmation.errors.required" text="- Please confirm your password -"></Label>
+                        <Label *ngIf="!password_confirmation.value === password.value" text="- your password do not match -"></Label>
                     </StackLayout>
                 </StackLayout>
 

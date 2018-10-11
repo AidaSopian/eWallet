@@ -6,11 +6,11 @@ import { AppComponent } from "./app.component";
 import { NativeScriptHttpClientModule } from "nativescript-angular/http-client";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NativeScriptFormsModule } from "nativescript-angular/forms";
-
+import { HttpModule } from "@angular/http";
 import { LoginComponent } from "./login/login.component";
 import { RegisterComponent } from "./register/register.component";
 import { SecureComponent } from "./secure/secure.component";
-
+import { HttpClientModule } from '@angular/common/http';
 import { HttpService } from "./http/http.service";
 import { DashboardComponent } from "~/app/dashboard/dashboard.component";
 import { HomeComponent } from "~/app/home/home.component";
@@ -29,8 +29,10 @@ import { MinLengthDirective, IsEmailDirective } from "~/app/verification.directi
         NativeScriptModule,
         NativeScriptUISideDrawerModule,
         NativeScriptHttpClientModule,
+        HttpClientModule,
         FormsModule,
         ReactiveFormsModule,
+        HttpModule,
         NativeScriptFormsModule
     ],
     declarations: [
