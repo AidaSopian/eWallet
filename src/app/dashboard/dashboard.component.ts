@@ -14,7 +14,8 @@ import * as localStorage from 'nativescript-localstorage';
 @Component({
     selector: "Dashboard",
     moduleId: module.id,
-    templateUrl: "./dashboard.component.html"
+    templateUrl: "./dashboard.component.html",
+    styleUrls: ["./dashboard-common.css"],
 })
 export class DashboardComponent implements OnInit {
     private userDetails = Array();
@@ -42,3 +43,5 @@ export class DashboardComponent implements OnInit {
         this.router.navigate(["/login"], { clearHistory: true });
     }
 }
+
+

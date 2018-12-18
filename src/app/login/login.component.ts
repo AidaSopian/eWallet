@@ -34,6 +34,7 @@ export class LoginComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.page.actionBarHidden = true;
         if(ApplicationSettings.getBoolean("authenticated", false)) {
             this.router.navigate(["/secure"], { clearHistory: true });
         }

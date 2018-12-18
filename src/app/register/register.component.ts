@@ -9,7 +9,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RouterExtensions } from "nativescript-angular/router";
 import { HttpClient } from "@angular/common/http";
 import { HttpService } from "~/app/http/http.service";
-import { EventData } from "tns-core-modules/ui/page/page";
 
 @Component({
     selector: "Register",
@@ -44,9 +43,7 @@ export class RegisterComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        /* ***********************************************************
-        * Use the "ngOnInit" handler to initialize data for this component.
-        *************************************************************/
+        this.page.actionBarHidden = true;
     }
 
     onSignupWithSocialProviderButtonTap(): void {
